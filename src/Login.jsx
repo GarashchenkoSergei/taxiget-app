@@ -1,50 +1,80 @@
-import React from 'react'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { withAuth } from "./AuthContext";
+import Button from "@material-ui/core/Button";
 
-class Login extends React.Component {
+class Login extends Component {
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: "",
+  };
+
+  static propTypes = {
+    navigateTo: PropTypes.func,
   };
 
   handleChange = (e) => {
-    this.setState({ [e.target.name] : e.target.value });
+    this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSubmit = (e) => {
+  authenticate = (e) => {
     e.preventDefault();
-
-    this.props.navigateTo('map');
+    const { email, password } = this.state;
+    this.props.logIn(email, password);
   };
+
+  goToProfile = () => {
+    this.props.navigateTo("profile");
+  }
 
   render() {
     const { email, password } = this.state;
 
     return (
       <>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="email">Email:</label>
-          <input 
-            id="email" 
-            type="email" 
-            name="email" 
-            size="28"
-            value={email}
-            onChange={this.handleChange}
-          />
-          <label htmlFor="password">Password:</label>
-          <input 
-            id="password" 
-            type="password" 
-            name="password" 
-            size="28"
-            value={password}
-            onChange={this.handleChange}
-          />
-          <input type="submit" value="Submit"/>
-        </form>
+        {this.props.isLoggedIn ? (
+          <div>
+            <p>You are logged in</p>
+            <Button
+              onClick={this.goToProfile}
+              variant="contained"
+              color="primary"
+            >
+              Go to profile
+            </Button>
+          </div>
+        ) : (
+          <form onSubmit={this.authenticate}>
+            <label htmlFor="email">Email:</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              size="28"
+              value={email}
+              onChange={this.handleChange}
+            />
+            <label htmlFor="password">Password:</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              size="28"
+              value={password}
+              onChange={this.handleChange}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Login
+            </Button>
+          </form>
+        )}
       </>
-    )
+    );
   }
 }
 
-export default Login;
+export const LoginWithAuth = withAuth(Login);

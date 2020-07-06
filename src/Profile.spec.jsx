@@ -1,10 +1,10 @@
 import React from 'react'
-import { Profile } from './Profile'
+import { ProfileWithAuth } from './Profile'
 import { render } from '@testing-library/react'
 
 describe('Profile', () => {
   it('renders correctly', () => {
-    const {container} = render(<Profile />);
+    const {container} = render(<ProfileWithAuth />);
     expect(container.innerHTML).toMatch('Profile');
   });
 });
