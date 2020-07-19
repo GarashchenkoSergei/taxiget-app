@@ -1,34 +1,48 @@
 import React from 'react';
+import logo from './logo.svg'
 import Button from '@material-ui/core/Button';
-import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export const Header = props => {
-  const { navItems, navigateTo } = props;
   return <>
     <header>
       <div className="logo-wrapper">
-        <img src="" alt=""/>
+        <img src={logo} className="App" alt=""/>
       </div>
       <nav className="navigation">
         <ul className="navigation__list">
-          {navItems.map((item, index) => (
-            <li className="navigation__item" key={index}>
+          <li className="navigation__item">
+            <Link to="/">
               <Button 
-                onClick={() => navigateTo(item)}
-                variant="contained" 
-                color="primary"
-              >
-                {item}
+                  variant="contained" 
+                  color="primary"
+                >
+                  Login
               </Button>
-            </li>
-          ))}
+            </Link>
+          </li>
+          <li className="navigation__item">
+            <Link to="/map">
+              <Button 
+                  variant="contained" 
+                  color="primary"
+                >
+                  Map
+              </Button>
+            </Link>
+          </li>
+          <li className="navigation__item">
+            <Link to="/profile">
+              <Button 
+                  variant="contained" 
+                  color="primary"
+                >
+                  Profile
+              </Button>
+            </Link>
+          </li>
         </ul>
       </nav>
     </header>
   </>
-}
-
-Header.propTypes = {
-  navItems: PropTypes.array,
-  navigateTo: PropTypes.func,
 }

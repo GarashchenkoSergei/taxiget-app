@@ -1,41 +1,32 @@
 import React from "react";
-import { LoginWithAuth } from "./Login.jsx";
-import { ProfileWithAuth } from "./Profile.jsx";
+import Login from "./App/containers/Login";
+import Profile from "./App/containers/Profile";
+import Signup from "./App/containers/Signup";
 import Map from "./Map.jsx";
 import { Header } from "./Header.jsx";
 import "./App.css";
-import { withAuth } from "./AuthContext.jsx";
+import { connect } from "react-redux";
+import { Switch, Route } from "react-router-dom";
+import { PrivateRoute } from "./PrivateRoute"
 
 class App extends React.Component {
-  state = { currentPage: "login" };
-
-  navigateTo = (page) => {
-    if (this.props.isLoggedIn) {
-      this.setState({ currentPage: page });
-    } else {
-      this.setState({ currentPage: "login" });
-    }
-  };
-
-  pages = {
-    login: <LoginWithAuth navigateTo={this.navigateTo} />,
-    map: <Map />,
-    profile: <ProfileWithAuth navigateTo={this.navigateTo} />,
-  };
-
   render() {
-    const navItems = Object.keys(this.pages);
-    const currentPage = this.state.currentPage;
-
     return (
       <>
-        <Header navItems={navItems} navigateTo={this.navigateTo} />
+        <Header />
         <main>
-          <section>{this.pages[currentPage]}</section>
+          <section>
+            <Switch>
+              <Route exact path="/" component={Login} />
+              <Route path="/signup" component={Signup} />
+              <PrivateRoute path="/map" component={Map} />
+              <PrivateRoute path="/profile" component={Profile} />
+            </Switch>
+          </section>
         </main>
       </>
     );
   }
 }
 
-export default withAuth(App);
+export default connect((state) => ({ isLoggedIn: state.loginReducer.isLoggedIn }))(App);
